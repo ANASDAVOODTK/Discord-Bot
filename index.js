@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const https = require('https');
 let url = 'https://cdn-api.co-vin.in/api/v2/admin/location/districts/17'
 
-fetchDataAsync();
 
 
 client.on("ready", () => {
@@ -17,7 +16,7 @@ client.on("message", async msg => {
   if (mess.includes('hi')) {
     msg.reply("Hello");
     //const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
-   // msg.channel.send(file);
+    //msg.channel.send(file);
     fetchDataAsync();
 
   }
