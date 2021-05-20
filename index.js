@@ -8,7 +8,7 @@ let url = 'https://cdn-api.co-vin.in/api/v2/admin/location/districts/17'
 fetchDataAsync();
 
 
-/*client.on("ready", () => {
+client.on("ready", () => {
   console.log('Ready');
 })
 
@@ -18,14 +18,13 @@ client.on("message", async msg => {
     msg.reply("Hello");
     //const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
    // msg.channel.send(file);
-    //fetchDataAsync();
+    fetchDataAsync();
 
   }
-})*/
+})
 
 function fetchDataAsync() {
-  //let url = "https://www.reddit.com/r/popular.json";
-
+  
 https.get(url,(res) => {
     let body = "";
 
