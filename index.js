@@ -37,14 +37,8 @@ client.on("message", async msg => {
          var dist_data = district[i].district_name+" ("+" Id: "+body.districts[i].district_id+")";
          console.log(dist_data);
         
- 
-         const embed = new Discord.MessageEmbed()
-	        .setColor('#EFFF00')
-	        .setTitle('District List')
-      	 .addFields(
-	   	    { 'test':dist_data }, );
 
-           msg.channel.send(embed);
+         msg.reply(dist_data);
 
          
          if(i = district.length)
