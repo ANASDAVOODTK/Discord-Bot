@@ -16,8 +16,18 @@ client.on("ready", () => {
 
 client.on("message", async msg => {
     mess = msg.content;
+
+ //this is the thing !!!!!!!!!!
+    if (msg.author.bot) {
+      // do nothing
+      console.log('Ignoring bot message!');
+      return;
+    }
+
+
   if (mess.includes('hi')) {
      msg.reply("HI Choose You District");
+
     //const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
    // msg.channel.send(file);
    request(url, options, (error, res, body) => {
@@ -26,26 +36,22 @@ client.on("message", async msg => {
     };
 
     if (!error && res.statusCode == 200) {
-        
-      //console.log("District: "+body.districts[0].district_name+" ("+" Id: "+body.districts[0].district_id+")");
 
         var district = body.districts
         
         for(var i = 0; i < district.length; i++)
         {
-         var dist_data = district[i].district_name+" ("+" Id: "+body.districts[i].district_id+")";
+         var dist_data = district[i].district_name.toString()+" ("+" Id: "+body.districts[i].district_id.toString()+")";
          console.log(dist_data);
+      
+         msg.channel.send({
+          embed: {
+              title: "District List",
+              color: 3447003,
+              description: `${JSON.stringify(dist_data)}`
+              }
+            });
         
-
-         msg.reply(dist_data);
-
-         
-         if(i = district.length)
-          {
-           console.log(i +"  "+district.length)
-          break;
-          }
-         
 
          }
        
