@@ -141,6 +141,7 @@ client.on("message", async msg => {
 
     if (!error && res.statusCode == 200) 
     {
+      // here the data of center name
        var cname = body.sessions[0].name
        msg.reply(cname);
     }
