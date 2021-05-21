@@ -4,10 +4,7 @@ const client = new Discord.Client()
 const request = require('request');
 let url = 'https://cdn-api.co-vin.in/api/v2/admin/location/districts/17'
 
-
-let options = {json: true};
-
-//fetchDataAsync();
+let options = { json: true };
 
 
 client.on("ready", () => {
@@ -15,49 +12,53 @@ client.on("ready", () => {
 })
 
 client.on("message", async msg => {
-    mess = msg.content;
+  message = msg.content;
 
- //this is the thing !!!!!!!!!!
-    if (msg.author.bot) {
-      // do nothing
-      console.log('Ignoring bot message!');
-      return;
-    }
+  //this one stop the self looping
+  if (msg.author.bot) {
+    console.log('Ignoring bot message!');
+    return;
+  }
 
 
-  if (mess.includes('hi')) {
-     msg.reply("HI Choose You District");
+  if (message.includes('vacin centers')) {
+    msg.reply("HI Choose You Sate");
 
-    //const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
-   // msg.channel.send(file);
-   request(url, options, (error, res, body) => {
-    if (error) {
-        return  console.log(error)
-    };
+    //code for listing state (for alexy)
+  }
 
-    if (!error && res.statusCode == 200) {
+
+  //code for listing districts in the above state
+  else if (message.includes('vacin centers')) {
+    msg.reply("HI Choose You District");
+
+    request(url, options, (error, res, body) => {
+      if (error) {
+        return console.log(error)
+      };
+
+      if (!error && res.statusCode == 200) {
 
         var district = body.districts
-        
-        for(var i = 0; i < district.length; i++)
-        {
-         var dist_data = district[i].district_name.toString()+" ("+" Id: "+body.districts[i].district_id.toString()+")";
-         console.log(dist_data);
-      
-         msg.channel.send({
-          embed: {
+
+        for (var i = 0; i < district.length; i++) {
+          var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
+          console.log(dist_data);
+
+          msg.channel.send({
+            embed: {
               title: `${district[i].district_name}`,
               color: 3447003,
               description: `${body.districts[i].district_id}`
-              }
-            });
-        
+            }
+          });
 
-         }
-       
-    };
-  });
-   
+
+        }
+
+      };
+    });
+
   }
 })
 
