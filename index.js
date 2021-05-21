@@ -7,6 +7,10 @@ let urls = 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
 let options = { json: true };
 let optionssta = { json: true};
 const prefix = "!";
+const prefix1 = "#";
+const prefix2 = "*";
+
+var dist_id1;
 
 client.on("ready", () => {
   console.log('Ready');
@@ -42,7 +46,7 @@ client.on("message", async msg => {
           var state_data = state[i].state_name.toString() + " (" + " Id: " + body.states[i].state_id.toString() + ")";
           console.log(state_data);
 
-          num_str += state[i].state_name.toString()+ " Id: " + "!"+body.states[i].state_id.toString()
+          num_str += state[i].state_name.toString()+" 🆔 == " + "!"+body.states[i].state_id.toString()
 
           if(i < (arr_len-1) ){
             num_str += '\n';
@@ -93,7 +97,7 @@ client.on("message", async msg => {
           var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
           console.log(dist_data);
 
-          dist_string  += district[i].district_name.toString()+ " Id: " + "!"+body.districts[i].district_id.toString()
+          dist_string  += district[i].district_name.toString()+ " 🆔 == " + "#"+body.districts[i].district_id.toString()
 
           if(i < (dislength-1) ){
             dist_string += '\n';
@@ -116,7 +120,33 @@ client.on("message", async msg => {
       };
     });
 
+
   }
+
+  if (msg.content.startsWith(prefix1)) {
+    dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
+    msg.reply("\n"+"Please Enter Your Preferred Date in this format ** *01-05-2021 **");
+  }
+
+  if (msg.content.startsWith(prefix2)) {
+    var date = msg.content.slice(prefix2.length).trim().split(' ');
+    msg.reply("\n"+"** Center Details **");
+
+  let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id="+dist_id1+"&date="+date
+
+  request(url12, options, (error, res, body) => {
+    if (error) {
+      return console.log(error)
+    };
+
+    if (!error && res.statusCode == 200) 
+    {
+       var cname = body.sessions[0].name
+       msg.reply(cname);
+    }
+   });
+  }
+  
 })
 
 
