@@ -46,9 +46,9 @@ client.on("message", async msg => {
       
          msg.channel.send({
           embed: {
-              title: "District List",
+              title: `${district[i].district_name}`,
               color: 3447003,
-              description: `${JSON.stringify(dist_data)}`
+              description: `${body.districts[i].district_id}`
               }
             });
         
