@@ -42,11 +42,7 @@ client.on("message", async msg => {
           var state_data = state[i].state_name.toString() + " (" + " Id: " + body.states[i].state_id.toString() + ")";
           console.log(state_data);
 
-<<<<<<< HEAD
-          num_str += state[i].state_name.toString()+ " Id: " + "!"+body.states[i].state_id.toString()
-=======
           num_str += state[i].state_name.toString() + " 🆔 == " + "!" + body.states[i].state_id.toString()
->>>>>>> 4696308e899928f70e6fc046169df433c3b6cccb
 
           if (i < (arr_len - 1)) {
             num_str += '\n';
@@ -97,11 +93,7 @@ client.on("message", async msg => {
           var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
           console.log(dist_data);
 
-<<<<<<< HEAD
-          dist_string  += district[i].district_name.toString()+ " Id: " + "!"+body.districts[i].district_id.toString()
-=======
           dist_string += district[i].district_name.toString() + " 🆔 == " + "#" + body.districts[i].district_id.toString()
->>>>>>> 4696308e899928f70e6fc046169df433c3b6cccb
 
           if (i < (dislength - 1)) {
             dist_string += '\n';
@@ -127,10 +119,6 @@ client.on("message", async msg => {
   }
 })
 
-<<<<<<< HEAD
-
-client.login(process.env.TOKEN)
-=======
   if (msg.content.startsWith(prefix1)) {
     dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
     msg.reply("\n" + "Please Enter Your Preferred Date in this format ** *01-05-2021 **");
@@ -156,6 +144,5 @@ client.login(process.env.TOKEN)
   }
 
 })
->>>>>>> 4696308e899928f70e6fc046169df433c3b6cccb
 
 
