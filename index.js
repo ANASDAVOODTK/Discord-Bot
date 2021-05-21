@@ -34,20 +34,35 @@ client.on("message", async msg => {
 
         var state = body.states
 
-        for (var i = 0; i < state.length; i++) {
+        var arr_len = state.length;
+
+        var num_str = '';
+
+        for (var i = 0; i < arr_len; i++) {
           var state_data = state[i].state_name.toString() + " (" + " Id: " + body.states[i].state_id.toString() + ")";
           console.log(state_data);
 
+          num_str += state[i].state_name.toString()+ " Id: " +"!"+body.states[i].state_id.toString()
+
+          if(i < (arr_len-1) ){
+            num_str += '\n';
+           }
+          }
+
+          setTimeout(function(){
+            
           msg.channel.send({
             embed: {
-              title: `${state[i].state_name}`,
+              title: "Sate List",
               color: 3447003,
-              description: `${body.states[i].state_id}`
+              description: `${num_str}`
             }
           });
+        }, 1 * 1000);
 
 
-        }
+
+        
 
       };
     });
@@ -56,7 +71,7 @@ client.on("message", async msg => {
 
 
   //code for listing districts in the above state
-  else if (message.includes('districtid')) {
+  if (message.includes('districtid')) {
     msg.reply("HI Choose You District");
 
     request(url, options, (error, res, body) => {
