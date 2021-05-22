@@ -141,8 +141,35 @@ client.on("message", async msg => {
 
       if (!error && res.statusCode == 200) {
         // here the data of center name
-        var cname = body.sessions[0].name
-        msg.reply(cname);
+        var session = body.sessions
+
+        var s_str = '';
+
+        var s_len = session.length;
+
+        for(var i = 0; i < s_len; i++) {
+          var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() +")" + " (" + body.sessions[i].block_name.toString() +")" + " (" + body.sessions[i].pincode.toString() +")"+ " (" + body.sessions[i].from.toString() +")"+ " (" + body.sessions[i].to.toString() +")"+ " (" + body.sessions[i].lat.toString() +")"+ " (" + body.sessions[i].long.toString() +")"+ " (" + body.sessions[i].slots.toString() +")";
+          console.log(session_data);
+
+          s_str += " 🆔 == " + session[i].center_id.toString() +" " + body.sessions[i].name.toString() +" " + body.sessions[i].block_name.toString() +" PIN " + body.sessions[i].pincode.toString()+ " From" + body.sessions[i].from.toString()+ " to " + body.sessions[i].to.toString() +"Location"+ body.sessions[i].lat.toString()+ "Location" + body.sessions[i].long.toString()+ " Session Timings" + body.sessions[i].slots.toString()
+
+          if (i < (s_len - 1)) {
+            s_str += '\n';
+          }
+        }
+
+        setTimeout(function () {
+
+        msg.channel.send({
+          embed: {
+            Title: "Session Details",
+            color: 3447003,
+            description: `${s_str}`
+
+          }
+        });
+
+      }, 1 * 1000);
       }
     });
   }
