@@ -151,7 +151,7 @@ client.on("message", async msg => {
           var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() +")" + " (" + body.sessions[i].block_name.toString() +")" + " (" + body.sessions[i].pincode.toString() +")"+ " (" + body.sessions[i].from.toString() +")"+ " (" + body.sessions[i].to.toString() +")"+ " (" + body.sessions[i].lat.toString() +")"+ " (" + body.sessions[i].long.toString() +")"+ " (" + body.sessions[i].slots.toString() +")";
           console.log(session_data);
 
-          s_str += " 🆔 == " + session[i].center_id.toString() +" " + body.sessions[i].name.toString() +" " + body.sessions[i].block_name.toString() +" PIN " + body.sessions[i].pincode.toString()+ " From" + body.sessions[i].from.toString()+ " to " + body.sessions[i].to.toString() +"Location"+ body.sessions[i].lat.toString()+ "Location" + body.sessions[i].long.toString()+ " Session Timings" + body.sessions[i].slots.toString()
+          s_str += " 🏥 ➡️  " + "Center Id: "+session[i].center_id.toString() +"\n" + body.sessions[i].name.toString() +"\n" + body.sessions[i].block_name.toString() +" PIN " + body.sessions[i].pincode.toString()+ " From" + body.sessions[i].from.toString()+ " to " + body.sessions[i].to.toString() +"Location"+ body.sessions[i].lat.toString()+ "Location" + body.sessions[i].long.toString()+ " Session Timings" + body.sessions[i].slots.toString()
 
           if (i < (s_len - 1)) {
             s_str += '\n';
