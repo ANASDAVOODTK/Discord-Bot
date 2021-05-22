@@ -14,15 +14,47 @@ var dist_id1;
 
 client.on("ready", () => {
   console.log('Ready');
+  client.guilds.cache.forEach((guild) => {
+    // Getting one of their channels
+        let channel = guild.channels.cache.array()[2];
+    // Sending the channel a message
+        channel.send("Hey\n Type **help** to know the bot");
+    });
 })
 
 client.on("message", async msg => {
   message = msg.content;
 
+
+  
+
   //this one stop the self looping
   if (msg.author.bot) {
     console.log('Ignoring bot message!');
     return;
+  }
+
+  if (message.includes('help')) {
+    
+    msg.channel.send({
+      embed: {
+        title: "BOT HELP",
+        color: 3447003,
+        description:"Enter **vaccine** to know avilable vaccine centers \n\n Enter **register** for registration \n\n Enter **notify** to get notification of avilable solts"
+      }
+    });
+  }
+
+  if (message.includes('register')) {
+
+    msg.channel.send("Enter your Phone number with contry code")
+
+  }
+
+  if (message.includes('notify')) {
+
+    msg.channel.send("working on.....")
+
   }
 
 
