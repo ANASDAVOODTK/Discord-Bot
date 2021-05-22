@@ -183,7 +183,13 @@ client.on("message", async msg => {
           var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() +")" + " (" + body.sessions[i].block_name.toString() +")" + " (" + body.sessions[i].pincode.toString() +")"+ " (" + body.sessions[i].from.toString() +")"+ " (" + body.sessions[i].to.toString() +")"+ " (" + body.sessions[i].lat.toString() +")"+ " (" + body.sessions[i].long.toString() +")"+ " (" + body.sessions[i].slots.toString() +")";
           
 
-          s_str += " 🏥" +"\n" + "**Center Id: **"+session[i].center_id.toString() +"\n" + "**Center Name: **"+ body.sessions[i].name.toString() +"\n" + "**Block: **"+ body.sessions[i].block_name.toString() +" \n"+"**PIN: **" + body.sessions[i].pincode.toString()+ "\n" +"🕙" + "  "+ body.sessions[i].from.toString()+ " - " + body.sessions[i].to.toString() + " \n" +"⏱️**Session Timings**⏱️" + "\n" +body.sessions[i].slots.toString().replace(/,/g, '\n')+ "\n"
+          s_str += " 🏥" +"\n" + "**Center Id: **"+session[i].center_id.toString() +"\n" +
+           "**Center Name: **"+ body.sessions[i].name.toString() +"\n" + "**Block: **"+ body.sessions[i].block_name.toString() +" \n"+
+           "**PIN: **" + body.sessions[i].pincode.toString()+ "\n" +
+           "**Fees: **"+body.sessions[i].fee_type.toString() +" \n"+"**Slot Avaliable For Dose 1:  **"+body.sessions[i].available_capacity_dose1.toString() +" \n"
+           +"**Slot Avaliable For Dose 2: **"+ body.sessions[i].available_capacity_dose2.toString() +" \n"+ "**Slot Avaliable- **"+body.sessions[i].available_capacity.toString() +" \n"
+           +"**Age Limit: **"+ body.sessions[i].min_age_limit.toString() +" \n"+"💉**Vaccine: **"+ body.sessions[i].vaccine.toString() +" \n" +
+           "⏱️**Session Timings**⏱️" + "\n" +body.sessions[i].slots.toString().replace(/,/g, '\n')+ "\n" + "\n"
 
           if (i < (s_len - 1)) {
             s_str += '\n';
