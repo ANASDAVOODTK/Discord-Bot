@@ -62,7 +62,7 @@ client.on("message", async msg => {
     }
 
   const member = msg.guild.member(user);
-  const exampleEmbed = new Discord.MessageEmbed()
+  const details = new Discord.MessageEmbed()
 	.setColor('#0099ff')
 	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
 	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
@@ -79,7 +79,7 @@ client.on("message", async msg => {
 	.setTimestamp()
 	.setFooter('Get Vaccinated');
 
-msg.channel.send(exampleEmbed);
+msg.channel.send(details);
 
 
 
