@@ -59,7 +59,7 @@ client.on("message", async msg => {
   }
 
   const details = new Discord.MessageEmbed()
-	.setColor('#0099ff')
+	.setColor(' 0xFFFFFF')
 	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
 	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
 	.setDescription('Thanks For Choosing ME')
@@ -123,7 +123,7 @@ client.on("message", async msg => {
           msg.channel.send({
             embed: {
               title: "Sate List",
-              color: 3447003,
+              color:  15462131,
               description: `${num_str}`
             }
           });
@@ -174,7 +174,7 @@ client.on("message", async msg => {
           msg.channel.send({
             embed: {
               title: "Choose Your District",
-              color: 3447003,
+              color:  15462131,
               description: `${dist_string}`
             }
           });
@@ -191,12 +191,13 @@ client.on("message", async msg => {
   if (msg.content.startsWith(prefix1)) {
     var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-    msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
-    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 20000 });
+    msg.reply("\n" + "Please Enter Your Preferred Date in this format **DD-MM-YYY ** eg:01-05-2021");
+    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1000000 });
     console.log(collector)
     collector.on('collect', msg2 => {
       var date = msg2.content;
       console.log(date)
+      collector.stop();
 
       msg.reply("\n" + "** Center Details **");
 
@@ -206,7 +207,7 @@ client.on("message", async msg => {
 
       request(url12, options, (error, res, body) => {
         if (error) {
-          msg.reply("I can't See any Available Center")
+          msg.reply("Sorry, there is no Centers Avaliable")
           return console.log(error)
 
         };
@@ -219,35 +220,52 @@ client.on("message", async msg => {
 
           var s_len = session.length;
 
+          var abc = []
+
           for (var i = 0; i < s_len; i++) {
             var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
             console.log(session_data);
 
-            s_str += " :hospital:" + "\n" + "Center Id: " + session[i].center_id.toString() + "\n" +
-              "Center Name: " + body.sessions[i].name.toString() + "\n" + "Block: " + body.sessions[i].block_name.toString() + " \n" +
-              "PIN: " + body.sessions[i].pincode.toString() + "\n" +
-              "Fees: " + body.sessions[i].fee_type.toString() + " \n" + "Slot Avaliable For Dose 1:  " + body.sessions[i].available_capacity_dose1.toString() + " \n"
-              + "Slot Avaliable For Dose 2: " + body.sessions[i].available_capacity_dose2.toString() + " \n" + "Slot Avaliable- " + body.sessions[i].available_capacity.toString() + " \n"
-              + "Age Limit: " + body.sessions[i].min_age_limit.toString() + " \n" + ":syringe:Vaccine: " + body.sessions[i].vaccine.toString() + " \n" +
-              ":stopwatch:Session Timings:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
-
-            if (i < (s_len - 1)) {
-              s_str += '\n';
-            }
+            s_str = " :hospital:" + "\n" + "**Center Id: ** " + session[i].center_id.toString() + "\n" +
+              "**Center Name: ** " + body.sessions[i].name.toString() + "\n" + "**Block: **" + body.sessions[i].block_name.toString() + " \n" +
+              "**PIN: **" + body.sessions[i].pincode.toString() + "\n" +
+              "**Fees: **" + body.sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + body.sessions[i].available_capacity_dose1.toString() + " \n"
+              + "**Slot Avaliable For Dose 2: **" + body.sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + body.sessions[i].available_capacity.toString() + " \n"
+              + "**Age: **" + body.sessions[i].min_age_limit.toString()+"+" + " \n" + ":syringe:**Vaccine: **" + body.sessions[i].vaccine.toString() + " \n" +
+              ":stopwatch:**Session Timings**:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
+            abc.push(s_str)
+            
           }
 
-          setTimeout(function () {
+      
+          console.log(abc);
+            setTimeout( async () =>{
+              await Promise.all(abc.map(msg1 => (msg.channel.send({
+                embed: {
+                  Title: "Session Details",
+                  color: 3447003,
+                  description: `${msg1}`
+  
+                }
+              }))))
+              //var stem = s_str.slice(0,2000)
+             
 
-            msg.channel.send({
-              embed: {
-                Title: "Session Details",
-                color: 3447003,
-                description: `${s_str}`
+              // msg.channel.send({
+              //   embed: {
+              //     Title: "Session Details",
+              //     color: 3447003,
+              //     description: `${s_str}`
+  
+              //   }
+              // });
+  
+            }, 1 * 1000);
 
-              }
-            });
+            
+          
 
-          }, 1 * 1000);
+          
         }
         else {
           msg.reply("I Can't see any available slots")
