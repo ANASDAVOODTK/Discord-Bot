@@ -58,14 +58,6 @@ client.on("message", async msg => {
     return;
   }
 
-  let user;
-    if (msg.mentions.users.first()) {
-      user = msg.mentions.users.first();
-    } 
-    else {
-        user = msg.author;
-    }
-
   const member = msg.guild.member(user);
   const details = new Discord.MessageEmbed()
 	.setColor('#0099ff')
@@ -84,7 +76,18 @@ client.on("message", async msg => {
 	.setTimestamp()
 	.setFooter('Get Vaccinated');
 
-msg.channel.send(details);
+  let user;
+    if (msg.mentions.users.first()) {
+      user = msg.mentions.users.first();
+      msg.channel.send(details);
+    } 
+    else {
+        user = msg.author;
+    }
+
+ 
+
+
 
 
 
