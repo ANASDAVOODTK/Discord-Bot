@@ -40,7 +40,7 @@ client.on("ready", () => {
     // Getting one of their channels
     let channel = guild.channels.cache.array()[2];
     // Sending the channel a message
-    channel.send("Hey\n Type **help** to know the bot");
+    channel.send("Hey\nType **help** to know the bot");
 
   });
 
