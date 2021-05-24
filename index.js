@@ -60,13 +60,14 @@ client.on("message", async msg => {
 
   const details = new Discord.MessageEmbed()
 	.setColor(' 0xFFFFFF')
+  .setTitle('Type the following to perform the steps')
 	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
 	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
 	.setDescription('Thanks For Choosing ME')
 	.setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
 	.addFields(
-    { value: '\u200B' },
-		{ name: 'Type The following', value: 'To know the steps' },
+    { name: '\u200B', value: '\u200B' },
+		{ name: 'myinfo', value: 'TO know your registration details' },
 		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
 		{ name: ' **register**', value: 'For registration', inline: true },
     { name: ' **  notify**', value: '    To get notification of the solts', inline: true },
@@ -207,7 +208,7 @@ client.on("message", async msg => {
 
       request(url12, options, (error, res, body) => {
         if (error) {
-          msg.reply("Sorry, there is no Centers Avaliable")
+          msg.reply("Sorry, there is no Centers Avaliable on " + date)
           return console.log(error)
 
         };
@@ -261,6 +262,7 @@ client.on("message", async msg => {
               // });
   
             }, 1 * 1000);
+            
 
             
           
@@ -268,7 +270,7 @@ client.on("message", async msg => {
           
         }
         else {
-          msg.reply("I Can't see any available slots")
+          msg.reply("Sorry, There is no available slots on ")
         }
       });
 
@@ -279,8 +281,8 @@ client.on("message", async msg => {
 
   if (message.includes('register')) {
 
-    msg.channel.send("I Concernd Your privacy such as OTP,Personal info so I send Further details personaly 🔒")
-    msg.author.send("Enter your Phone number with contry code (91) 📞")
+    msg.channel.send("I'm Concernd About Your privacy, so I have directly send you the details 🔒")
+    msg.author.send("Enter your Phone number with your contry code (91-India) 📞")
 
   }
 
@@ -348,7 +350,7 @@ client.on("message", async msg => {
 
           axios(config)
             .then(function (response) {
-              msg.reply("OTP Verification Success 👍")
+              msg.reply("OTP Verification Successfull 👍")
               console.log(JSON.stringify(response.data));
               customersRef.child(msg.author.id).update({
                 token: response.data.token,
@@ -358,7 +360,7 @@ client.on("message", async msg => {
             })
             .catch(function (error) {
               console.log(error);
-              msg.reply("OTP is incorrect 👎")
+              msg.reply("Sorry, OTP is incorrect 👎")
             });
 
         })
@@ -373,7 +375,7 @@ client.on("message", async msg => {
   }
 
   function name() {
-    msg.reply("Enter your Name")
+    msg.reply("Enter your Full Name")
 
     const collectorname = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 100000 });
 
@@ -504,19 +506,20 @@ client.on("message", async msg => {
           var phoneno = snapshot.val().phoneno
 
           if (token === undefined || token == null) {
-            msg.reply("Hi You Are Not Registered 😞" + "\n" + "Enter 'register' for registration")
+            msg.reply("Sorry You Are Not Registered 😞" + "\n" + "Enter 'register' for registration")
           }
           else if (name === undefined || name == null)
           {
             msg.reply("Hi Your Number Registered, But till your personal data is not added so register again 😞" + "\n" + "Enter 'register' for registration")
           }
           else {
-            msg.channel.send("I Concernd Your privacy such as OTP,Personal info so I send only personal 🔒")
+            msg.channel.send("I'm Concernd About Your privacy so I'm sending it directly to you 🔒")
             msg.author.send({
               embed: {
                 title: name,
                 color: 3447003,
-                description: district + "\n" + address + "\n" + age + "\n" + idtype + "\n" + idno+"\n"+phoneno
+                description: "**Disctrict: **"+district + "\n" + "**Address: **"+address + "\n" + "**Age: **"+age + "\n" + "**Personal ID: **"+idtype + "\n" + "**ID Card no.: **"+idno+"\n"+"**Phone no.: **"+phoneno +"\n"+"\n"
+                +"Go to the server to use me Again "
               }
             });
 
