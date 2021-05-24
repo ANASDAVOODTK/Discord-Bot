@@ -177,14 +177,14 @@ client.on("message", async msg => {
   if (msg.content.startsWith(prefix1)) {
     var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-    msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
-    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 30000 });
+    msg.author.send("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
+    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 20000 });
     console.log(collector)
     collector.on('collect', msg2 => {
       var date = msg2.content;
       console.log(date)
 
-      
+      msg.reply("\n" + "** Center Details **");
 
       let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
 
@@ -202,18 +202,12 @@ client.on("message", async msg => {
           var session = body.sessions
 
           var s_str = '';
+
           var s_len = session.length;
-         for(var i = 0; i < s_len; i++) {
-          var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() +")" + " (" + body.sessions[i].block_name.toString() +")" + " (" + body.sessions[i].pincode.toString() +")"+ " (" + body.sessions[i].from.toString() +")"+ " (" + body.sessions[i].to.toString() +")"+ " (" + body.sessions[i].lat.toString() +")"+ " (" + body.sessions[i].long.toString() +")"+ " (" + body.sessions[i].slots.toString() +")";
-          
-          msg.reply("\n" + "** Center Details **");
-          s_str += " 🏥" +"\n" + "**Center Id: **"+session[i].center_id.toString() +"\n" +
-           "**Center Name: **"+ body.sessions[i].name.toString() +"\n" + "**Block: **"+ body.sessions[i].block_name.toString() +" \n"+
-           "**PIN: **" + body.sessions[i].pincode.toString()+ "\n" +
-           "**Fees: **"+body.sessions[i].fee_type.toString() +" \n"+"**Slot Avaliable For Dose 1:  **"+body.sessions[i].available_capacity_dose1.toString() +" \n"
-           +"**Slot Avaliable For Dose 2: **"+ body.sessions[i].available_capacity_dose2.toString() +" \n"+ "**Slot Avaliable- **"+body.sessions[i].available_capacity.toString() +" \n"
-           +"**Age Limit: **"+ body.sessions[i].min_age_limit.toString() +" \n"+"💉**Vaccine: **"+ body.sessions[i].vaccine.toString() +" \n" +
-           "⏱️**Session Timings**⏱️" + "\n" +body.sessions[i].slots.toString().replace(/,/g, '\n')+ "\n" + "\n"
+
+          for (var i = 0; i < s_len; i++) {
+            var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
+            console.log(session_data);
 
             s_str += " 🏥 ➡️  " + "Center Id: " + session[i].center_id.toString() + "\n" + body.sessions[i].name.toString() + "\n" + body.sessions[i].block_name.toString() + " PIN " + body.sessions[i].pincode.toString() + " From" + body.sessions[i].from.toString() + " to " + body.sessions[i].to.toString() + "Location" + body.sessions[i].lat.toString() + "Location" + body.sessions[i].long.toString() + " Session Timings" + body.sessions[i].slots.toString()
 
@@ -235,8 +229,8 @@ client.on("message", async msg => {
 
           }, 1 * 1000);
         }
-        else{
-          msg.channel.send("I can,t See available slots")
+        else {
+          msg.reply("I Can't see any available slots")
         }
       });
 
@@ -283,7 +277,7 @@ client.on("message", async msg => {
           userId: msg.author.id,
         });
 
-        msg.author.send("Enter OTP 🔑");
+        msg.author.send("Enter OTP ");
         const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
         console.log(collector)
         collector.on('collect', msg1 => {
@@ -293,7 +287,6 @@ client.on("message", async msg => {
           const code = crypto.createHash('sha256').update(msg1.content).digest('hex');
           console.log(code)
           console.log(msg1.content)
-
           //OTP Confirmation
 
           var data = JSON.stringify({
