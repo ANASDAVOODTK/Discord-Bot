@@ -178,13 +178,13 @@ client.on("message", async msg => {
     var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
     msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
-    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 20000 });
+    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 30000 });
     console.log(collector)
     collector.on('collect', msg2 => {
       var date = msg2.content;
       console.log(date)
 
-      msg.reply("\n" + "** Center Details **");
+      
 
       let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
 
@@ -202,11 +202,11 @@ client.on("message", async msg => {
           var session = body.sessions
 
           var s_str = '';
-
-        for(var i = 0; i < s_len; i++) {
+          var s_len = session.length;
+         for(var i = 0; i < s_len; i++) {
           var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() +")" + " (" + body.sessions[i].block_name.toString() +")" + " (" + body.sessions[i].pincode.toString() +")"+ " (" + body.sessions[i].from.toString() +")"+ " (" + body.sessions[i].to.toString() +")"+ " (" + body.sessions[i].lat.toString() +")"+ " (" + body.sessions[i].long.toString() +")"+ " (" + body.sessions[i].slots.toString() +")";
           
-
+          msg.reply("\n" + "** Center Details **");
           s_str += " 🏥" +"\n" + "**Center Id: **"+session[i].center_id.toString() +"\n" +
            "**Center Name: **"+ body.sessions[i].name.toString() +"\n" + "**Block: **"+ body.sessions[i].block_name.toString() +" \n"+
            "**PIN: **" + body.sessions[i].pincode.toString()+ "\n" +
@@ -234,6 +234,9 @@ client.on("message", async msg => {
             });
 
           }, 1 * 1000);
+        }
+        else{
+          msg.channel.send("I can,t See available slots")
         }
       });
 
