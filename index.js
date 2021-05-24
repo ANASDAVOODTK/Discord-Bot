@@ -58,15 +58,6 @@ client.on("message", async msg => {
     return;
   }
 
-  let user;
-    if (msg.mentions.users.first()) {
-      user = msg.mentions.users.first();
-    } 
-    else {
-        user = msg.author;
-    }
-
-  const member = msg.guild.member(user);
   const details = new Discord.MessageEmbed()
 	.setColor('#0099ff')
 	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
