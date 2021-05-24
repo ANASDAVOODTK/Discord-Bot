@@ -22,6 +22,8 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 
+let database = firebase.database()
+
 const customersRef = firebase.database().ref('/users');
 
 let urls = 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
@@ -38,8 +40,11 @@ client.on("ready", () => {
     // Getting one of their channels
     let channel = guild.channels.cache.array()[2];
     // Sending the channel a message
-        channel.send("Hey\nType **help** to know the bot");
-    });
+    channel.send("Hey\n Type **help** to know the bot");
+
+  });
+
+
 })
 
 client.on("message", async msg => {
@@ -222,7 +227,13 @@ msg.channel.send(details);
             var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
             console.log(session_data);
 
-            s_str += " 🏥 ➡️  " + "Center Id: " + session[i].center_id.toString() + "\n" + body.sessions[i].name.toString() + "\n" + body.sessions[i].block_name.toString() + " PIN " + body.sessions[i].pincode.toString() + " From" + body.sessions[i].from.toString() + " to " + body.sessions[i].to.toString() + "Location" + body.sessions[i].lat.toString() + "Location" + body.sessions[i].long.toString() + " Session Timings" + body.sessions[i].slots.toString()
+            s_str += " :hospital:" + "\n" + "Center Id: " + session[i].center_id.toString() + "\n" +
+              "Center Name: " + body.sessions[i].name.toString() + "\n" + "Block: " + body.sessions[i].block_name.toString() + " \n" +
+              "PIN: " + body.sessions[i].pincode.toString() + "\n" +
+              "Fees: " + body.sessions[i].fee_type.toString() + " \n" + "Slot Avaliable For Dose 1:  " + body.sessions[i].available_capacity_dose1.toString() + " \n"
+              + "Slot Avaliable For Dose 2: " + body.sessions[i].available_capacity_dose2.toString() + " \n" + "Slot Avaliable- " + body.sessions[i].available_capacity.toString() + " \n"
+              + "Age Limit: " + body.sessions[i].min_age_limit.toString() + " \n" + ":syringe:Vaccine: " + body.sessions[i].vaccine.toString() + " \n" +
+              ":stopwatch:Session Timings:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
 
             if (i < (s_len - 1)) {
               s_str += '\n';
@@ -254,7 +265,7 @@ msg.channel.send(details);
 
   if (message.includes('register')) {
 
-    msg.channel.send("🔒 I Concernd Your privacy such as OTP,Personal info so I send Further details personaly 🔒")
+    msg.channel.send("I Concernd Your privacy such as OTP,Personal info so I send Further details personaly 🔒")
     msg.author.send("Enter your Phone number with contry code (91) 📞")
 
   }
@@ -264,6 +275,10 @@ msg.channel.send(details);
   if (msg.content.startsWith(prefixph)) {
 
     const phone = msg.content.slice(prefixph.length).trim().split(' ');
+
+    customersRef.child(msg.author.id).update({
+      phoneno: phone
+    });
 
     var data = JSON.stringify({
       "mobile": "{{" + phone + "}}",
@@ -291,7 +306,7 @@ msg.channel.send(details);
         });
 
         msg.author.send("Enter OTP ");
-        const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
+        const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 100000 });
         console.log(collector)
         collector.on('collect', msg1 => {
 
@@ -324,6 +339,8 @@ msg.channel.send(details);
               customersRef.child(msg.author.id).update({
                 token: response.data.token,
               });
+              name();
+              collector.stop();
             })
             .catch(function (error) {
               console.log(error);
@@ -340,6 +357,170 @@ msg.channel.send(details);
 
 
   }
+
+  function name() {
+    msg.reply("Enter your Name")
+
+    const collectorname = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 100000 });
+
+    collectorname.on('collect', msg1 => {
+
+      customersRef.child(msg.author.id).update({
+        name: msg1.content,
+
+      });
+      dname()
+      collectorname.stop();
+    })
+
+  }
+
+
+  function dname() {
+    msg.reply("Enter your District")
+
+    const collectordist = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 100000 });
+
+    collectordist.on('collect', msg2 => {
+
+      customersRef.child(msg.author.id).update({
+        district: msg2.content,
+
+
+      });
+      address();
+      collectordist.stop();
+    })
+
+  }
+
+  function address() {
+    msg.reply("Enter your Address")
+
+    const collectoraddress = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectoraddress.on('collect', msg3 => {
+
+      customersRef.child(msg.author.id).update({
+        address: msg3.content,
+
+
+      });
+      age();
+      collectoraddress.stop();
+    })
+
+  }
+
+  function age() {
+    msg.reply("Enter your age")
+
+    const collectorage = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectorage.on('collect', msg4 => {
+
+      customersRef.child(msg.author.id).update({
+        age: msg4.content,
+
+
+      });
+      idtype();
+      collectorage.stop();
+    })
+
+  }
+
+  function idtype() {
+    msg.reply("Enter your ID Type (adhaar, election id, pan card...")
+
+    const collectoridtype = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectoridtype.on('collect', msg6 => {
+
+      customersRef.child(msg.author.id).update({
+        idtype: msg6.content,
+
+
+      });
+      idno();
+      collectoridtype.stop();
+    })
+
+  }
+
+  function idno() {
+    msg.reply("Enter your ID Number")
+
+    const collectoridno = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectoridno.on('collect', msg5 => {
+
+      customersRef.child(msg.author.id).update({
+        idno: msg5.content,
+
+      });
+      msg.reply("✅ Done!!"+"\n"+"Enter 'myinfo' to know your details.");
+      collectoridno.stop();
+    })
+
+  }
+
+  if (message.includes('myinfo')) {
+
+    customersRef.child(msg.author.id).update({
+      userId: msg.author.id,
+
+    });
+
+    msg.channel.send("Checking....⌛")
+
+
+    setTimeout(function () {
+      database.ref("users/" + msg.author.id).once('value')
+        .then(function (snapshot) {
+
+          
+          var token = snapshot.val().token
+          var idno = snapshot.val().idno
+          var idtype = snapshot.val().idtype
+          var age = snapshot.val().age
+          var address = snapshot.val().address
+          var district = snapshot.val().district
+          var name = snapshot.val().name
+          var phoneno = snapshot.val().phoneno
+
+          if (token === undefined || token == null) {
+            msg.reply("Hi You Are Not Registered 😞" + "\n" + "Enter 'register' for registration")
+          }
+          else if (name === undefined || name == null)
+          {
+            msg.reply("Hi Your Number Registered, But till your personal data is not added so register again 😞" + "\n" + "Enter 'register' for registration")
+          }
+          else {
+            msg.channel.send("I Concernd Your privacy such as OTP,Personal info so I send only personal 🔒")
+            msg.author.send({
+              embed: {
+                title: name,
+                color: 3447003,
+                description: district + "\n" + address + "\n" + age + "\n" + idtype + "\n" + idno+"\n"+phoneno
+              }
+            });
+
+          }
+
+
+        })
+
+    }, 1 * 1000);
+
+
+
+
+  }
+
+
+
+
 
 })
 
