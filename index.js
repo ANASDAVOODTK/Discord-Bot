@@ -177,7 +177,7 @@ client.on("message", async msg => {
   if (msg.content.startsWith(prefix1)) {
     var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-    msg.author.send("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
+    msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
     const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 20000 });
     console.log(collector)
     collector.on('collect', msg2 => {
