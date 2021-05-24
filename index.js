@@ -40,11 +40,8 @@ client.on("ready", () => {
     // Getting one of their channels
     let channel = guild.channels.cache.array()[2];
     // Sending the channel a message
-    channel.send("Hey\n Type **help** to know the bot");
-
-  });
-
-
+        channel.send("Hey\nType **help** to know the bot");
+    });
 })
 
 client.on("message", async msg => {
@@ -58,17 +55,33 @@ client.on("message", async msg => {
     return;
   }
 
-  if (message.includes('help')) {
+  let user;
+    if (msg.mentions.users.first()) {
+      user = msg.mentions.users.first();
+    } 
+    else {
+        user = msg.author;
+    }
 
+  const member = msg.guild.member(user);
+  const exampleEmbed = new Discord.MessageEmbed()
+	.setColor('#0099ff')
+	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
+	.setDescription('Thanks For Choosing ME')
+	.setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+	.addFields(
+    { value: '\u200B' },
+		{ name: 'Type The following', value: 'To know the steps' },
+		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
+		{ name: ' **register**', value: 'For registration', inline: true },
+    { name: ' **  notify**', value: '    To get notification of the solts', inline: true },
+	)
+	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
+	.setTimestamp()
+	.setFooter('Get Vaccinated');
 
-    msg.channel.send({
-      embed: {
-        title: "BOT HELP",
-        color: 3447003,
-        description: "Enter **vaccine** to know avilable vaccine centers \n\n Enter **register** for registration \n\n Enter **notify** to get notification of avilable solts"
-      }
-    });
-  }
+msg.channel.send(exampleEmbed);
 
 
 
