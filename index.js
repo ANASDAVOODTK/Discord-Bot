@@ -74,7 +74,8 @@ client.on("message", async msg => {
 	)
 	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
 	.setTimestamp()
-	.setFooter('Get Vaccinated');
+  .setFooter('Get Vaccinated', 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png');
+	
 
   if (message.includes('help')) {
 
@@ -125,7 +126,11 @@ client.on("message", async msg => {
             embed: {
               title: "Sate List",
               color:  15462131,
-              description: `${num_str}`
+              description: `${num_str}`,
+              footer: {
+                text: "Get Vaccinated",
+                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+              },
             }
           });
         }, 1 * 1000);
@@ -176,7 +181,11 @@ client.on("message", async msg => {
             embed: {
               title: "Choose Your District",
               color:  15462131,
-              description: `${dist_string}`
+              description: `${dist_string}`,
+              footer: {
+                text: "Get Vaccinated",
+                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+              },
             }
           });
 
@@ -221,6 +230,8 @@ client.on("message", async msg => {
 
           var s_len = session.length;
 
+          var j = 0;
+
           var abc = []
 
           for (var i = 0; i < s_len; i++) {
@@ -239,13 +250,17 @@ client.on("message", async msg => {
           }
 
       
-          console.log(abc);
             setTimeout( async () =>{
               await Promise.all(abc.map(msg1 => (msg.channel.send({
                 embed: {
                   Title: "Session Details",
                   color: 3447003,
-                  description: `${msg1}`
+                  description: `${msg1}`,
+                  timestamp: new Date(),
+                  footer: {
+                    text: `Total Parts ${abc.length}`,
+                    icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+                  },
   
                 }
               }))))
@@ -519,7 +534,11 @@ client.on("message", async msg => {
                 title: name,
                 color: 3447003,
                 description: "**Disctrict: **"+district + "\n" + "**Address: **"+address + "\n" + "**Age: **"+age + "\n" + "**Personal ID: **"+idtype + "\n" + "**ID Card no.: **"+idno+"\n"+"**Phone no.: **"+phoneno +"\n"+"\n"
-                +"Go to the server to use me Again "
+                +"Go to the server to use me Again ",
+                footer: {
+                  text: "Get Vaccinated",
+                  icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+                },
               }
             });
 
