@@ -194,7 +194,7 @@ client.on("message", async msg => {
 
   }
 
-//giving the all centers lists
+  //giving the all centers lists
 
   if (msg.content.startsWith(prefix1)) {
     var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
@@ -373,7 +373,7 @@ client.on("message", async msg => {
   }
 
 
- //Taking user details
+  //Taking user details
 
 
   function name() {
@@ -542,7 +542,7 @@ client.on("message", async msg => {
 
   }
 
-//subscribption of notification
+  //subscribption of notification
   if (msg.content == "notify") {
 
     selectstate();
@@ -698,7 +698,7 @@ client.on("message", async msg => {
 
 
   }
-//cancel notification 
+  //cancel notification 
 
   if (msg.content == "notify_stop") {
     customersRef1.child(msg.author.id).remove();
@@ -706,7 +706,7 @@ client.on("message", async msg => {
   }
 
 
-//checking every hour ther is any free slots are avilable 
+  //checking every hour ther is any free slots are avilable 
 
 
   function main() {
