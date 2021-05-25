@@ -3,8 +3,10 @@ const Discord = require("discord.js")
 const client = new Discord.Client()
 const request = require('request');
 var axios = require('axios');
-var firebase = require('firebase');
 var crypto = require('crypto');
+var firebase = require('firebase');
+const moment = require('moment');
+const cron = require('node-cron');
 
 
 
@@ -27,6 +29,7 @@ firebase.initializeApp(firebaseConfig)
 let database = firebase.database()
 
 const customersRef = firebase.database().ref('/users');
+const customersRef1 = firebase.database().ref('/notify');
 
 let urls = 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
 
@@ -48,11 +51,11 @@ client.on("ready", () => {
 
 
 })
-
+//bot ready to start
 client.on("message", async msg => {
   message = msg.content;
 
-
+  main();
 
   //this one stop the self looping
   if (msg.author.bot) {
@@ -92,16 +95,7 @@ client.on("message", async msg => {
 
   }
 
-
-
-
-  if (message.includes('notify')) {
-
-    msg.channel.send("working on.....")
-
-  }
-
-
+  //choose state
   if (message.includes('vaccine')) {
     msg.reply("HI Choose You Sate");
 
@@ -122,7 +116,7 @@ client.on("message", async msg => {
           var state_data = state[i].state_name.toString() + " (" + " Id: " + body.states[i].state_id.toString() + ")";
           console.log(state_data);
 
-          num_str += state[i].state_name.toString() + " 🆔 == " + "!" + body.states[i].state_id.toString()
+          num_str += state[i].state_name.toString() + " 🆔 == " + "**!" + body.states[i].state_id.toString() + "**"
 
           if (i < (arr_len - 1)) {
             num_str += '\n';
@@ -134,7 +128,7 @@ client.on("message", async msg => {
           msg.channel.send({
             embed: {
               title: "Sate List",
-              color:  15462131,
+              color: 15462131,
               description: `${num_str}`,
               footer: {
                 text: "Get Vaccinated",
@@ -154,112 +148,129 @@ client.on("message", async msg => {
 
   //code for listing districts in the above state
   if (msg.content.startsWith(prefix)) {
-    msg.reply("HI Choose You District");
 
-    const useerinput = msg.content.slice(prefix.length).trim().split(' ');
+    if (msg.content == "!") {
+      msg.reply("Please enter valid commands");
+    }
 
-    let urld = "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + useerinput
+    else {
 
-    request(urld, options, (error, res, body) => {
-      if (error) {
-        return console.log(error)
-      };
+      const useerinput = msg.content.slice(prefix.length).trim().split(' ');
 
-      if (!error && res.statusCode == 200) {
+      
 
-        var district = body.districts
+      let urld = "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + useerinput
 
-        var dislength = district.length;
+      request(urld, options, (error, res, body) => {
+        if (error) {
+          return console.log(error)
+        };
 
-        var dist_string = '';
+        if (!error && res.statusCode == 200) {
 
-        for (var i = 0; i < dislength; i++) {
-          var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
-          console.log(dist_data);
+          msg.reply("HI Choose You District");
+          var district = body.districts
 
-          dist_string += district[i].district_name.toString() + " 🆔 == " + "#" + body.districts[i].district_id.toString()
+          var dislength = district.length;
 
-          if (i < (dislength - 1)) {
-            dist_string += '\n';
-          }
-        }
+          var dist_string = '';
 
-        setTimeout(function () {
+          for (var i = 0; i < dislength; i++) {
+            var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
+            console.log(dist_data);
 
-          msg.channel.send({
-            embed: {
-              title: "Choose Your District",
-              color:  15462131,
-              description: `${dist_string}`,
-              footer: {
-                text: "Get Vaccinated",
-                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
-              },
+            dist_string += district[i].district_name.toString() + " 🆔 == " + "#" + body.districts[i].district_id.toString()
+
+            if (i < (dislength - 1)) {
+              dist_string += '\n';
             }
-          });
+          }
 
-        }, 1 * 1000);
+          setTimeout(function () {
+
+            msg.channel.send({
+              embed: {
+                title: "Choose Your District",
+                color: 15462131,
+                description: `${dist_string}`,
+                footer: {
+                  text: "Get Vaccinated",
+                  icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+                },
+              }
+            });
+
+          }, 1 * 1000);
 
 
-      };
-    });
+        };
+      });
+
+
+    }
+
 
 
   }
 
+  //giving the all centers lists
+
   if (msg.content.startsWith(prefix1)) {
-    var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-    msg.reply("\n" + "Please Enter Your Preferred Date in this format **DD-MM-YYY ** eg:01-05-2021");
-    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1000000 });
-    console.log(collector)
-    collector.on('collect', msg2 => {
-      var date = msg2.content;
-      console.log(date)
-      collector.stop();
+    if (msg.content == "#") {
+      msg.reply("Please enter valid commands");
+    }
 
-      msg.reply("\n" + "** Center Details **");
+    else {
+      var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-      let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
-
-      console.log(url12)
-
-      request(url12, options, (error, res, body) => {
-        if (error) {
-          msg.reply("Sorry, there is no Centers Avaliable on " + date)
-          return console.log(error)
-
-        };
-
-        if (!error && res.statusCode == 200) {
-          // here the data of center name
-          var session = body.sessions
-
-          var s_str = '';
-
-          var s_len = session.length;
-
-          var j = 0;
-
-          var abc = []
-
-          for (var i = 0; i < s_len; i++) {
-            var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
-            console.log(session_data);
-
-            s_str = " :hospital:" + "\n" + "**Center Id: ** " + session[i].center_id.toString() + "\n" +
-              "**Center Name: ** " + body.sessions[i].name.toString() + "\n" + "**Block: **" + body.sessions[i].block_name.toString() + " \n" +
-              "**PIN: **" + body.sessions[i].pincode.toString() + "\n" +
-              "**Fees: **" + body.sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + body.sessions[i].available_capacity_dose1.toString() + " \n"
-              + "**Slot Avaliable For Dose 2: **" + body.sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + body.sessions[i].available_capacity.toString() + " \n"
-              + "**Age: **" + body.sessions[i].min_age_limit.toString()+"+" + " \n" + ":syringe:**Vaccine: **" + body.sessions[i].vaccine.toString() + " \n" +
-              ":stopwatch:**Session Timings**:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
-            abc.push(s_str)
-            
-          }
-
-      
-            setTimeout( async () =>{
+      msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
+      const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
+      console.log(collector)
+      collector.on('collect', msg2 => {
+        var date = msg2.content;
+        console.log(date)
+        collector.stop();
+  
+        msg.reply("\n" + "** Center Details **");
+  
+        let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
+  
+        console.log(url12)
+  
+        request(url12, options, (error, res, body) => {
+          if (error) {
+            msg.reply("Sorry, there is no Centers Avaliable on " + date)
+            return console.log(error)
+  
+          };
+  
+          if (!error && res.statusCode == 200) {
+            // here the data of center name
+            var session = body.sessions
+            var s_str = '';
+  
+            var s_len = session.length;
+  
+            var abc = []
+  
+            for (var i = 0; i < s_len; i++) {
+              var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
+              console.log(session_data);
+  
+              s_str = " :hospital:" + "\n" + "**Center Id: ** " + session[i].center_id.toString() + "\n" +
+                "**Center Name: ** " + body.sessions[i].name.toString() + "\n" + "**Block: **" + body.sessions[i].block_name.toString() + " \n" +
+                "**PIN: **" + body.sessions[i].pincode.toString() + "\n" +
+                "**Fees: **" + body.sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + body.sessions[i].available_capacity_dose1.toString() + " \n"
+                + "**Slot Avaliable For Dose 2: **" + body.sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + body.sessions[i].available_capacity.toString() + " \n"
+                + "**Age: **" + body.sessions[i].min_age_limit.toString() + "+" + " \n" + ":syringe:**Vaccine: **" + body.sessions[i].vaccine.toString() + " \n" +
+                ":stopwatch:**Session Timings**:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
+              abc.push(s_str)
+  
+            }
+  
+  
+            setTimeout(async () => {
               await Promise.all(abc.map(msg1 => (msg.channel.send({
                 embed: {
                   Title: "Session Details",
@@ -273,35 +284,27 @@ client.on("message", async msg => {
   
                 }
               }))))
-              //var stem = s_str.slice(0,2000)
-             
-
-              // msg.channel.send({
-              //   embed: {
-              //     Title: "Session Details",
-              //     color: 3447003,
-              //     description: `${s_str}`
-  
-              //   }
-              // });
   
             }, 1 * 1000);
-            
+  
+  
+  
+  
+  
+  
+          }
+          else {
+            msg.reply("Sorry, There is no available slots on ")
+          }
+        });
+        collector.stop();
+      })
 
-            
-          
-
-          
-        }
-        else {
-          msg.reply("Sorry, There is no available slots on ")
-        }
-      });
-
-    })
+    }
+    
   }
 
-  //OTP Generations
+  //Asking phone number
 
   if (message.includes('register')) {
 
@@ -346,8 +349,7 @@ client.on("message", async msg => {
         });
 
         msg.author.send("Enter OTP ");
-        const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 100000 });
-        console.log(collector)
+        const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 120000 });
         collector.on('collect', msg1 => {
 
           //OTP Convert to SHA256
@@ -397,6 +399,10 @@ client.on("message", async msg => {
 
 
   }
+
+
+  //Taking user details
+
 
   function name() {
     msg.reply("Enter your Full Name")
@@ -499,13 +505,15 @@ client.on("message", async msg => {
         idno: msg5.content,
 
       });
-      msg.reply("✅ Done!!"+"\n"+"Enter 'myinfo' to know your details.");
+      msg.reply("✅ Done!!" + "\n" + "Enter 'myinfo' to know your details.");
       collectoridno.stop();
     })
 
   }
 
-  if (message.includes('myinfo')) {
+  //giving users details 
+
+  if (msg.content == "myinfo") {
 
     customersRef.child(msg.author.id).update({
       userId: msg.author.id,
@@ -519,7 +527,7 @@ client.on("message", async msg => {
       database.ref("users/" + msg.author.id).once('value')
         .then(function (snapshot) {
 
-          
+
           var token = snapshot.val().token
           var idno = snapshot.val().idno
           var idtype = snapshot.val().idtype
@@ -532,8 +540,7 @@ client.on("message", async msg => {
           if (token === undefined || token == null) {
             msg.reply("Sorry You Are Not Registered 😞" + "\n" + "Enter 'register' for registration")
           }
-          else if (name === undefined || name == null)
-          {
+          else if (name === undefined || name == null) {
             msg.reply("Hi Your Number Registered, But till your personal data is not added so register again 😞" + "\n" + "Enter 'register' for registration")
           }
           else {
@@ -542,8 +549,8 @@ client.on("message", async msg => {
               embed: {
                 title: name,
                 color: 3447003,
-                description: "**Disctrict: **"+district + "\n" + "**Address: **"+address + "\n" + "**Age: **"+age + "\n" + "**Personal ID: **"+idtype + "\n" + "**ID Card no.: **"+idno+"\n"+"**Phone no.: **"+phoneno +"\n"+"\n"
-                +"Go to the server to use me Again ",
+                description: "**Disctrict: **" + district + "\n" + "**Address: **" + address + "\n" + "**Age: **" + age + "\n" + "**Personal ID: **" + idtype + "\n" + "**ID Card no.: **" + idno + "\n" + "**Phone no.: **" + phoneno + "\n" + "\n"
+                  + "Go to the server to use me Again ",
                 footer: {
                   text: "Get Vaccinated",
                   icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
@@ -563,11 +570,299 @@ client.on("message", async msg => {
 
   }
 
+  //subscribption of notification
+  if (msg.content == "notify") {
+
+    selectstate();
+  }
+
+  function selectstate() {
+    msg.reply("HI Choose You Sate");
+
+    request(urls, optionssta, (error, res, body) => {
+      if (error) {
+        return console.log(error)
+      };
+
+      if (!error && res.statusCode == 200) {
+
+        var state = body.states
+
+        var arr_len = state.length;
+
+        var num_str = '';
+
+        for (var i = 0; i < arr_len; i++) {
+          var state_data = state[i].state_name.toString() + " (" + " Id: " + body.states[i].state_id.toString() + ")";
+          console.log(state_data);
+
+          num_str += state[i].state_name.toString() + " 🆔 == " + "**" + body.states[i].state_id.toString() + "**"
+
+          if (i < (arr_len - 1)) {
+            num_str += '\n';
+          }
+        }
+
+        setTimeout(function () {
+
+          msg.channel.send({
+            embed: {
+              title: "Sate List",
+              color: 15462131,
+              description: `${num_str}`,
+              footer: {
+                text: "Get Vaccinated",
+                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+              },
+            }
+          });
+        }, 1 * 1000);
+
+
+
+      };
+    });
+
+    const collectorstae = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectorstae.on('collect', msgs => {
+
+      selectdist(msgs.content)
+      collectorstae.stop();
+    })
+
+  }
+
+
+  function selectdist(id) {
+
+
+
+    let urld = "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + id
+
+    request(urld, options, (error, res, body) => {
+      if (error) {
+        return console.log(error)
+      };
+
+      if (!error && res.statusCode == 200) {
+        msg.reply("HI Choose You District");
+        var district = body.districts
+
+        var dislength = district.length;
+
+        var dist_string = '';
+
+        for (var i = 0; i < dislength; i++) {
+          var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
+          console.log(dist_data);
+
+          dist_string += district[i].district_name.toString() + " 🆔 == " + "**" + body.districts[i].district_id.toString() + "**"
+
+          if (i < (dislength - 1)) {
+            dist_string += '\n';
+          }
+        }
+
+        setTimeout(function () {
+
+          msg.channel.send({
+            embed: {
+              title: "Choose Your District",
+              color: 15462131,
+              description: `${dist_string}`,
+              footer: {
+                text: "Get Vaccinated",
+                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+              },
+            }
+          });
+
+        }, 1 * 1000);
+
+
+      };
+    });
+
+
+    const collectordist1 = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectordist1.on('collect', msgd => {
+
+      customersRef1.child(msg.author.id).update({
+        district: msgd.content,
+        userid: msg.author.id
+
+      });
+
+      age();
+
+      collectordist1.stop();
+    })
+
+
+  }
 
 
 
 
+
+  function age() {
+    msg.reply("Enter Your Age")
+
+    const collectorage1 = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 1800000 });
+
+    collectorage1.on('collect', msgg => {
+
+      customersRef1.child(msg.author.id).update({
+        age: msgg.content,
+      });
+      msg.reply("**✅ Done!!** You subscribed notification you will get notification every hour when slots are available \n If you want to unsubscribe notification. Then Just Enter '**stop_notify**'")
+      msg.author.send("✅ Done!! You subscribed notification")
+
+      collectorage1.stop();
+    })
+
+
+
+  }
+  //cancel notification 
+
+  if (msg.content == "notify_stop") {
+    customersRef1.child(msg.author.id).remove();
+    msg.reply("❌ You successfully cancelled notification")
+  }
+
+  //delete my info
+  if (msg.content == "delete_myinfo") {
+    customersRef.child(msg.author.id).remove();
+    msg.reply("❌ You successfully deleted your info")
+  }
+
+
+
+  //checking every hour ther is any free slots are avilable 
+
+
+  function main() {
+    try {
+      console.log("vaccine check started")
+      cron.schedule(' * 1 * * *', async () => {
+
+        var db = firebase.database().ref(`notify`);
+        db.once("value").then(function (snapshot) {
+          var a = Object.values(snapshot.val());
+          var b = JSON.stringify(a)
+          var arr = JSON.parse(b.toString());
+          const syncWait = ms => {
+            const end = Date.now() + ms
+            while (Date.now() < end) continue
+          }
+
+          for (var i = 0; i < arr.length; i++) {
+
+            checkAvailability(arr[i].district, arr[i].age, arr[i].userid);
+
+            syncWait(5000)
+
+
+          }
+        })
+
+      });
+    } catch (e) {
+      console.log('an error occured: ' + JSON.stringify(e, null, 2));
+      throw e;
+    }
+  }
+
+
+  async function checkAvailability(district, age, id) {
+
+    let datesArray = await fetchNext7Days();
+    datesArray.forEach(date => {
+      getSlotsForDate(date, district, age, id);
+    })
+  }
+
+  function getSlotsForDate(DATE, district, age, id) {
+    console.log(DATE, district, age);
+    let config = {
+      method: 'get',
+      url: "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + district + "&date=" + DATE,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+      }
+    };
+
+    axios(config)
+      .then(function (response) {
+        let sessions = response.data.sessions;
+        let validSlots = sessions.filter(response => response.min_age_limit <= age && response.available_capacity > 0)
+        if (validSlots.length > 0) {
+          notifyMe(validSlots, DATE, id);
+        }
+      })
+      .catch(function (error) {
+        // console.log(error+"222");
+      });
+  }
+
+  async function
+
+    notifyMe(validSlots, date, id) {
+
+    var daa = JSON.stringify(validSlots, null, '\t');
+    var sessions = JSON.parse(daa.toString());
+
+    var s_str = '';
+
+    var s_len = sessions.length;
+
+    var abc = []
+
+    for (var i = 0; i < s_len; i++) {
+
+      s_str = " :hospital:" + "\n" + "**Center Id: ** " + sessions[i].center_id.toString() + "\n" +
+        "**Center Name: ** " + sessions[i].name.toString() + "\n" + "**Block: **" + sessions[i].block_name.toString() + " \n" +
+        "**PIN: **" + sessions[i].pincode.toString() + "\n" +
+        "**Fees: **" + sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + sessions[i].available_capacity_dose1.toString() + " \n"
+        + "**Slot Avaliable For Dose 2: **" + sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + sessions[i].available_capacity.toString() + " \n"
+        + "**Age: **" + sessions[i].min_age_limit.toString() + "+" + " \n" + ":syringe:**Vaccine: **" + sessions[i].vaccine.toString() + " \n" +
+        ":stopwatch:**Session Timings**:stopwatch:" + "\n" + sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
+      abc.push(s_str)
+
+    }
+
+
+
+    client.users.fetch(id, false).then((user) => {
+      user.send({
+        embed: {
+          title: "Vaccine Avaliable Slots",
+          color: 15462131,
+          description: `${s_str}`,
+          footer: {
+            text: "Get Vaccinated",
+            icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+          },
+        }
+      });
+    });
+  };
+
+  async function fetchNext7Days() {
+    let dates = [];
+    let today = moment();
+    for (let i = 0; i < 7; i++) {
+      let dateString = today.format('DD-MM-YYYY')
+      dates.push(dateString);
+      today.add(1, 'day');
+    }
+    return dates;
+  }
 })
 
 
 client.login(process.env.TOKEN)
+
