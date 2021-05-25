@@ -13,6 +13,8 @@
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.2",
     "firebase": "^8.6.2",
+    "moment": "^2.29.1",
+    "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "request": "^2.88.2"
   }
