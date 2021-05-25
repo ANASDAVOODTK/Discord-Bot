@@ -8,6 +8,8 @@ var crypto = require('crypto');
 
 
 
+
+
 var firebaseConfig = {
   apiKey: "AIzaSyDt6eb9buDMCap2GdwF7Y9TcOJaz_B6u8o",
   authDomain: "bot-discord-f0d02.firebaseapp.com",
@@ -67,10 +69,17 @@ client.on("message", async msg => {
 	.setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
 	.addFields(
     { name: '\u200B', value: '\u200B' },
-		{ name: 'myinfo', value: 'TO know your registration details' },
+		{ name: 'myinfo', value: 'To know your registration details' },
+    { name: '\u200B', value: '\u200B' },
 		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
+    { name: '\u200B', value: '\u200B' },
 		{ name: ' **register**', value: 'For registration', inline: true },
-    { name: ' **  notify**', value: '    To get notification of the slots', inline: true },
+    { name: '\u200B', value: '\u200B' },
+    { name: ' **notify**', value: '    To get notification of the slots', inline: true },
+    { name: '\u200B', value: '\u200B' },
+    { name: ' **delete_myinfo**', value: 'To delete your info', inline: true },
+    { name: '\u200B', value: '\u200B' },
+    { name: ' **stop_notify**', value: 'To stop the notification', inline: true },
 	)
 	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
 	.setTimestamp()
