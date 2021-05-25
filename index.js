@@ -70,7 +70,7 @@ client.on("message", async msg => {
 		{ name: 'myinfo', value: 'TO know your registration details' },
 		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
 		{ name: ' **register**', value: 'For registration', inline: true },
-    { name: ' **  notify**', value: '    To get notification of the solts', inline: true },
+    { name: ' **  notify**', value: '    To get notification of the slots', inline: true },
 	)
 	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
 	.setTimestamp()
