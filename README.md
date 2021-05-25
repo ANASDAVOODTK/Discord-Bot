@@ -13,7 +13,8 @@ Cowin-Bot is a Discord Bot developed by <a href="https://github.com/ANASDAVOODTK
  
 
 ## How to configure and use Cowin-Bot
-Add <a href="https://discordapp.com/oauth2/authorize?client_id=844522949138055189&scope=bot&permissions=66186303">Cowin Bot </a to your server
+Add <a href="https://discordapp.com/oauth2/authorize?client_id=844522949138055189&scope=bot&permissions=66186303">Cowin Bot </a> to your server. 
+
 Below are the list of comands to be used to intrect with Cowin-Bot
 
 1. ```help ``` -
