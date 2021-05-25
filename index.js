@@ -62,23 +62,23 @@ client.on("message", async msg => {
   }
 
   const details = new Discord.MessageEmbed()
-    .setColor(' 0xFFFFFF')
-    .setTitle('Type the following to perform the steps')
-    .setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
-    .setAuthor('Covin Bot', 'https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
-    .setDescription('Thanks For Choosing ME')
-    .setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
-    .addFields(
-      { name: '\u200B', value: '\u200B' },
-      { name: 'myinfo', value: 'TO know your registration details' },
-      { name: '**vaccine**', value: 'To know avilable centers', inline: true },
-      { name: ' **register**', value: 'For registration', inline: true },
-      { name: ' **  notify**', value: '    To get notification of the solts', inline: true },
-    )
-    .setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
-    .setTimestamp()
-    .setFooter('Get Vaccinated', 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png');
-
+	.setColor(' 0xFFFFFF')
+  .setTitle('Type the following to perform the steps')
+	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
+	.setDescription('Thanks For Choosing ME')
+	.setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+	.addFields(
+    { name: '\u200B', value: '\u200B' },
+		{ name: 'myinfo', value: 'TO know your registration details' },
+		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
+		{ name: ' **register**', value: 'For registration', inline: true },
+    { name: ' **  notify**', value: '    To get notification of the slots', inline: true },
+	)
+	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
+	.setTimestamp()
+  .setFooter('Get Vaccinated', 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png');
+	
 
   if (message.includes('help')) {
 
