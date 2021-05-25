@@ -62,23 +62,23 @@ client.on("message", async msg => {
   }
 
   const details = new Discord.MessageEmbed()
-	.setColor(' 0xFFFFFF')
-  .setTitle('Type the following to perform the steps')
-	.setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
-	.setAuthor('Covin Bot','https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
-	.setDescription('Thanks For Choosing ME')
-	.setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
-	.addFields(
-    { name: '\u200B', value: '\u200B' },
-		{ name: 'myinfo', value: 'TO know your registration details' },
-		{ name: '**vaccine**', value: 'To know avilable centers', inline: true },
-		{ name: ' **register**', value: 'For registration', inline: true },
-    { name: ' **  notify**', value: '    To get notification of the slots', inline: true },
-	)
-	.setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
-	.setTimestamp()
-  .setFooter('Get Vaccinated', 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png');
-	
+    .setColor(' 0xFFFFFF')
+    .setTitle('Type the following to perform the steps')
+    .setURL('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+    .setAuthor('Covin Bot', 'https://images.vexels.com/media/users/3/140503/isolated/lists/24882e71e8111a13f3f1055c1ad53cf3-hand-with-injection.png', 'https://discord.js.org')
+    .setDescription('Thanks For Choosing ME')
+    .setThumbnail('https://cobot12.s3.ap-south-1.amazonaws.com/bot.png')
+    .addFields(
+      { name: '\u200B', value: '\u200B' },
+      { name: 'myinfo', value: 'TO know your registration details' },
+      { name: '**vaccine**', value: 'To know avilable centers', inline: true },
+      { name: ' **register**', value: 'For registration', inline: true },
+      { name: ' **  notify**', value: '    To get notification of the slots', inline: true },
+    )
+    .setImage('https://cobot12.s3.ap-south-1.amazonaws.com/photo6147825254626602018.jpg')
+    .setTimestamp()
+    .setFooter('Get Vaccinated', 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png');
+
 
   if (message.includes('help')) {
 
@@ -140,56 +140,66 @@ client.on("message", async msg => {
   //code for listing districts in the above state
   if (msg.content.startsWith(prefix)) {
 
+    if (msg.content == "!") {
+      msg.reply("Please enter valid commands");
+    }
 
-    const useerinput = msg.content.slice(prefix.length).trim().split(' ');
+    else {
 
-    msg.reply("HI Choose You District");
+      const useerinput = msg.content.slice(prefix.length).trim().split(' ');
 
-    let urld = "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + useerinput
+      
 
-    request(urld, options, (error, res, body) => {
-      if (error) {
-        return console.log(error)
-      };
+      let urld = "https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + useerinput
 
-      if (!error && res.statusCode == 200) {
+      request(urld, options, (error, res, body) => {
+        if (error) {
+          return console.log(error)
+        };
 
-        var district = body.districts
+        if (!error && res.statusCode == 200) {
 
-        var dislength = district.length;
+          msg.reply("HI Choose You District");
+          var district = body.districts
 
-        var dist_string = '';
+          var dislength = district.length;
 
-        for (var i = 0; i < dislength; i++) {
-          var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
-          console.log(dist_data);
+          var dist_string = '';
 
-          dist_string += district[i].district_name.toString() + " 🆔 == " + "#" + body.districts[i].district_id.toString()
+          for (var i = 0; i < dislength; i++) {
+            var dist_data = district[i].district_name.toString() + " (" + " Id: " + body.districts[i].district_id.toString() + ")";
+            console.log(dist_data);
 
-          if (i < (dislength - 1)) {
-            dist_string += '\n';
-          }
-        }
+            dist_string += district[i].district_name.toString() + " 🆔 == " + "#" + body.districts[i].district_id.toString()
 
-        setTimeout(function () {
-
-          msg.channel.send({
-            embed: {
-              title: "Choose Your District",
-              color: 15462131,
-              description: `${dist_string}`,
-              footer: {
-                text: "Get Vaccinated",
-                icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
-              },
+            if (i < (dislength - 1)) {
+              dist_string += '\n';
             }
-          });
+          }
 
-        }, 1 * 1000);
+          setTimeout(function () {
+
+            msg.channel.send({
+              embed: {
+                title: "Choose Your District",
+                color: 15462131,
+                description: `${dist_string}`,
+                footer: {
+                  text: "Get Vaccinated",
+                  icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+                },
+              }
+            });
+
+          }, 1 * 1000);
 
 
-      };
-    });
+        };
+      });
+
+
+    }
+
 
 
   }
@@ -197,83 +207,92 @@ client.on("message", async msg => {
   //giving the all centers lists
 
   if (msg.content.startsWith(prefix1)) {
-    var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-    msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
-    const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
-    console.log(collector)
-    collector.on('collect', msg2 => {
-      var date = msg2.content;
-      console.log(date)
-      collector.stop();
+    if (msg.content == "#") {
+      msg.reply("Please enter valid commands");
+    }
 
-      msg.reply("\n" + "** Center Details **");
+    else {
+      var dist_id1 = msg.content.slice(prefix1.length).trim().split(' ');
 
-      let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
-
-      console.log(url12)
-
-      request(url12, options, (error, res, body) => {
-        if (error) {
-          msg.reply("Sorry, there is no Centers Avaliable on " + date)
-          return console.log(error)
-
-        };
-
-        if (!error && res.statusCode == 200) {
-          // here the data of center name
-          var session = body.sessions
-          var s_str = '';
-
-          var s_len = session.length;
-
-          var abc = []
-
-          for (var i = 0; i < s_len; i++) {
-            var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
-            console.log(session_data);
-
-            s_str = " :hospital:" + "\n" + "**Center Id: ** " + session[i].center_id.toString() + "\n" +
-              "**Center Name: ** " + body.sessions[i].name.toString() + "\n" + "**Block: **" + body.sessions[i].block_name.toString() + " \n" +
-              "**PIN: **" + body.sessions[i].pincode.toString() + "\n" +
-              "**Fees: **" + body.sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + body.sessions[i].available_capacity_dose1.toString() + " \n"
-              + "**Slot Avaliable For Dose 2: **" + body.sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + body.sessions[i].available_capacity.toString() + " \n"
-              + "**Age: **" + body.sessions[i].min_age_limit.toString() + "+" + " \n" + ":syringe:**Vaccine: **" + body.sessions[i].vaccine.toString() + " \n" +
-              ":stopwatch:**Session Timings**:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
-            abc.push(s_str)
-
+      msg.reply("\n" + "Please Enter Your Preferred Date in this format ** 01-05-2021 **");
+      const collector = new Discord.MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
+      console.log(collector)
+      collector.on('collect', msg2 => {
+        var date = msg2.content;
+        console.log(date)
+        collector.stop();
+  
+        msg.reply("\n" + "** Center Details **");
+  
+        let url12 = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + dist_id1 + "&date=" + date
+  
+        console.log(url12)
+  
+        request(url12, options, (error, res, body) => {
+          if (error) {
+            msg.reply("Sorry, there is no Centers Avaliable on " + date)
+            return console.log(error)
+  
+          };
+  
+          if (!error && res.statusCode == 200) {
+            // here the data of center name
+            var session = body.sessions
+            var s_str = '';
+  
+            var s_len = session.length;
+  
+            var abc = []
+  
+            for (var i = 0; i < s_len; i++) {
+              var session_data = session[i].center_id.toString() + " (" + body.sessions[i].name.toString() + ")" + " (" + body.sessions[i].block_name.toString() + ")" + " (" + body.sessions[i].pincode.toString() + ")" + " (" + body.sessions[i].from.toString() + ")" + " (" + body.sessions[i].to.toString() + ")" + " (" + body.sessions[i].lat.toString() + ")" + " (" + body.sessions[i].long.toString() + ")" + " (" + body.sessions[i].slots.toString() + ")";
+              console.log(session_data);
+  
+              s_str = " :hospital:" + "\n" + "**Center Id: ** " + session[i].center_id.toString() + "\n" +
+                "**Center Name: ** " + body.sessions[i].name.toString() + "\n" + "**Block: **" + body.sessions[i].block_name.toString() + " \n" +
+                "**PIN: **" + body.sessions[i].pincode.toString() + "\n" +
+                "**Fees: **" + body.sessions[i].fee_type.toString() + " \n" + "**Slot Avaliable For Dose 1: **" + body.sessions[i].available_capacity_dose1.toString() + " \n"
+                + "**Slot Avaliable For Dose 2: **" + body.sessions[i].available_capacity_dose2.toString() + " \n" + "**Slot Avaliable- **" + body.sessions[i].available_capacity.toString() + " \n"
+                + "**Age: **" + body.sessions[i].min_age_limit.toString() + "+" + " \n" + ":syringe:**Vaccine: **" + body.sessions[i].vaccine.toString() + " \n" +
+                ":stopwatch:**Session Timings**:stopwatch:" + "\n" + body.sessions[i].slots.toString().replace(/,/g, '\n') + "\n" + "\n"
+              abc.push(s_str)
+  
+            }
+  
+  
+            setTimeout(async () => {
+              await Promise.all(abc.map(msg1 => (msg.channel.send({
+                embed: {
+                  Title: "Session Details",
+                  color: 3447003,
+                  description: `${msg1}`,
+                  timestamp: new Date(),
+                  footer: {
+                    text: `Total Parts ${abc.length}`,
+                    icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
+                  },
+  
+                }
+              }))))
+  
+            }, 1 * 1000);
+  
+  
+  
+  
+  
+  
           }
+          else {
+            msg.reply("Sorry, There is no available slots on ")
+          }
+        });
+        collector.stop();
+      })
 
-
-          setTimeout(async () => {
-            await Promise.all(abc.map(msg1 => (msg.channel.send({
-              embed: {
-                Title: "Session Details",
-                color: 3447003,
-                description: `${msg1}`,
-                timestamp: new Date(),
-                footer: {
-                  text: `Total Parts ${abc.length}`,
-                  icon_url: 'https://cobot12.s3.ap-south-1.amazonaws.com/bot.png',
-                },
-
-              }
-            }))))
-
-          }, 1 * 1000);
-
-
-
-
-
-
-        }
-        else {
-          msg.reply("Sorry, There is no available slots on ")
-        }
-      });
-      collector.stop();
-    })
+    }
+    
   }
 
   //Asking phone number
@@ -485,7 +504,7 @@ client.on("message", async msg => {
 
   //giving users details 
 
-  if (msg.content=="myinfo") {
+  if (msg.content == "myinfo") {
 
     customersRef.child(msg.author.id).update({
       userId: msg.author.id,
@@ -705,7 +724,7 @@ client.on("message", async msg => {
     msg.reply("❌ You successfully cancelled notification")
   }
 
-//delete my info
+  //delete my info
   if (msg.content == "delete_myinfo") {
     customersRef.child(msg.author.id).remove();
     msg.reply("❌ You successfully deleted your info")
