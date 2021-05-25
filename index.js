@@ -485,7 +485,7 @@ client.on("message", async msg => {
 
   //giving users details 
 
-  if (message.includes('myinfo')) {
+  if (msg.content=="myinfo") {
 
     customersRef.child(msg.author.id).update({
       userId: msg.author.id,
@@ -704,6 +704,13 @@ client.on("message", async msg => {
     customersRef1.child(msg.author.id).remove();
     msg.reply("❌ You successfully cancelled notification")
   }
+
+//delete my info
+  if (msg.content == "delete_myinfo") {
+    customersRef.child(msg.author.id).remove();
+    msg.reply("❌ You successfully deleted your info")
+  }
+
 
 
   //checking every hour ther is any free slots are avilable 
