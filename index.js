@@ -541,7 +541,7 @@ client.on("message", async msg => {
             msg.reply("Sorry You Are Not Registered 😞" + "\n" + "Enter 'register' for registration")
           }
           else if (name === undefined || name == null) {
-            msg.reply("Hi Your Number Registered, But till your personal data is not added so register again 😞" + "\n" + "Enter 'register' for registration")
+            msg.reply("Hi Your Number Is Registered, But till your personal data is not added😞, so register again " + "\n" + "Enter 'register' for registration")
           }
           else {
             msg.channel.send("I'm Concernd About Your privacy so I'm sending it directly to you 🔒")
@@ -717,8 +717,8 @@ client.on("message", async msg => {
       customersRef1.child(msg.author.id).update({
         age: msgg.content,
       });
-      msg.reply("**✅ Done!!** You subscribed notification you will get notification every hour when slots are available \n If you want to unsubscribe notification. Then Just Enter '**stop_notify**'")
-      msg.author.send("✅ Done!! You subscribed notification")
+      msg.reply("**✅ Done!!** You are subscribed to get notification. You will get notification every hour when slots are available \n If you want to unsubscribe notification, then Just Enter '**stop_notify**'")
+      msg.author.send("✅ Done!! You are Subscribed To Get Notification")
 
       collectorage1.stop();
     })
@@ -730,13 +730,13 @@ client.on("message", async msg => {
 
   if (msg.content == "notify_stop") {
     customersRef1.child(msg.author.id).remove();
-    msg.reply("❌ You successfully cancelled notification")
+    msg.reply("❌ You have successfully unsubscribed ")
   }
 
   //delete my info
   if (msg.content == "delete_myinfo") {
     customersRef.child(msg.author.id).remove();
-    msg.reply("❌ You successfully deleted your info")
+    msg.reply("❌ You have successfully deleted your information")
   }
 
 
