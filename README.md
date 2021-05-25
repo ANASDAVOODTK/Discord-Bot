@@ -5,11 +5,12 @@ Cowin-Bot is a Discord Bot developed by <a href="https://github.com/ANASDAVOODTK
 
 ## Libraries used
 1. <a href="https://www.npmjs.com/package/axios">axios </a> : ^0.21.1
-2. <a href="https://discord.js.org/#/"> discord.js  </a> : ^12.5.3
+2. <a href="https://www.npmjs.com/package/request"> request </a> : ^2.88.2
 3. <a href="https://www.npmjs.com/package/dotenv"> dotenv  </a> :^9.0.2
 4. <a href="https://firebase.google.com/"> firebase </a> :^8.6.2
-5. <a href="https://www.npmjs.com/package/node-fetch"> node-fetch </a> : ^2.6.1
-6. <a href="https://www.npmjs.com/package/request"> request </a> : ^2.88.2
+5. <a href="https://discord.js.org/#/"> discord.js  </a> : ^12.5.3
+6. <a href="https://www.npmjs.com/package/node-fetch"> node-fetch </a> : ^2.6.1
+ 
 
 ## How to configure and use Cowin-Bot
 Add  to your server
