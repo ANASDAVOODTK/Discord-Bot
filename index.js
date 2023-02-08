@@ -8,18 +8,14 @@ var firebase = require('firebase');
 const moment = require('moment');
 const cron = require('node-cron');
 
-
-
-
-
 var firebaseConfig = {
-  apiKey: "AIzaSyDt6eb9buDMCap2GdwF7Y9TcOJaz_B6u8o",
-  authDomain: "bot-discord-f0d02.firebaseapp.com",
-  projectId: "bot-discord-f0d02",
-  storageBucket: "bot-discord-f0d02.appspot.com",
-  messagingSenderId: "845388166393",
-  appId: "1:845388166393:web:ed567721531f1259d5de28",
-  measurementId: "G-87QDVGX3Q2"
+  apiKey: " ",
+  authDomain: " ",
+  projectId: " ",
+  storageBucket: " ",
+  messagingSenderId: " ",
+  appId: " ",
+  measurementId: " "
 }
 
 
